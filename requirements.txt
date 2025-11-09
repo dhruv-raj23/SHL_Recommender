@@ -10,3 +10,4 @@ torchaudio
 python-multipart
 requests
 gunicorn
+gradio
