@@ -1,0 +1,11 @@
+pandas
+openpyxl
+sentence-transformers
+faiss-cpu
+fastapi
+uvicorn
+torch
+torchvision
+torchaudio
+python-multipart
+requests

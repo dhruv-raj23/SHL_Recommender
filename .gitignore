@@ -1,0 +1,25 @@
+# Python Cache 
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual Environments
+.env/
+venv/
+.venv/
+env/
+
+# Data & Generated Files
+data_out/
+submission_predictions.csv
+
+#  System / IDE Files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Logs & Temporary
+*.log
+*.tmp
+*.bak

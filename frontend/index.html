@@ -1,0 +1,111 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SHL Assessment Recommender</title>
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background: #f8f9fb;
+      padding: 40px;
+      text-align: center;
+    }
+    h1 {
+      color: #333;
+    }
+    textarea {
+      width: 80%;
+      height: 120px;
+      margin: 15px 0;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    table {
+      margin: 25px auto;
+      border-collapse: collapse;
+      width: 90%;
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    th, td {
+      padding: 12px 16px;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background: #007bff;
+      color: white;
+    }
+    tr:hover {
+      background: #f1f1f1;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔍 SHL Assessment Recommender</h1>
+  <p>Type a job description or hiring query below to get relevant SHL assessments.</p>
+  <textarea id="queryInput" placeholder="Enter job description here..."></textarea><br />
+  <button onclick="getRecommendations()">Get Recommendations</button>
+
+  <div id="results"></div>
+
+  <script>
+    async function getRecommendations() {
+      const query = document.getElementById("queryInput").value.trim();
+      if (!query) {
+        alert("Please enter a query first!");
+        return;
+      }
+      document.getElementById("results").innerHTML = "<p>Loading...</p>";
+
+      try {
+        const res = await fetch("http://127.0.0.1:8000/recommend", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ query, k: 6 }),
+        });
+        const data = await res.json();
+        displayResults(data.recommendations);
+      } catch (err) {
+        document.getElementById("results").innerHTML = "<p style='color:red'>Error connecting to API.</p>";
+      }
+    }
+
+    function displayResults(recs) {
+      if (!recs || recs.length === 0) {
+        document.getElementById("results").innerHTML = "<p>No results found.</p>";
+        return;
+      }
+
+      let html = `
+        <table>
+          <tr><th>Assessment Name</th><th>URL</th><th>Score</th></tr>
+          ${recs
+            .map(
+              (r) =>
+                `<tr><td>${r.assessment_name}</td><td><a href="${r.url}" target="_blank">${r.url}</a></td><td>${r.score.toFixed(3)}</td></tr>`
+            )
+            .join("")}
+        </table>
+      `;
+      document.getElementById("results").innerHTML = html;
+    }
+  </script>
+</body>
+</html>
