@@ -26,4 +26,5 @@ RUN chmod +x /app/start.sh
 EXPOSE 7860
 
 # Start
-CMD ["/app/start.sh"]
+CMD ["python", "app.py"]
+
